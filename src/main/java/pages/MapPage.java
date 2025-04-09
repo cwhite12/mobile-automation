@@ -1,23 +1,33 @@
 package pages;
 
-import io.appium.java_client.MobileElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import io.appium.java_client.android.AndroidDriver;
 
 public class MapPage {
-    AndroidDriver<MobileElement> driver;
+    AndroidDriver driver;
 
-    public MapPage(AndroidDriver<MobileElement> driver) {
+    public MapPage(AndroidDriver driver) {
         this.driver = driver;
     }
 
-    public void searchLocation(String location) {
-        driver.findElementById("//android.widget.TextView[@text=\"Search here\"]").sendKeys(location);
-        driver.findElementById("com.example:id/searchBtn").click();
+    public void openSearch() {
+        WebElement searchButton = driver.findElement(By.id("net.osmand.plus:id/map_search_button"));
+        searchButton.click();
     }
-    public void selectLocation(String location) {
-        driver.findElementById("//android.widget.LinearLayout[@resource-id=\"com.google.android.apps.maps:id/compass_container\"]/android.widget.LinearLayout00");
+
+    public void enterSearchQuery(String query) {
+        WebElement searchField = driver.findElement(By.id("net.osmand.plus:id/search_text"));
+        searchField.sendKeys(query);
     }
+
+    public void selectSearchResult() {
+        WebElement result = driver.findElement(By.id("net.osmand.plus:id/list_text"));
+        result.click();
+    }
+
     public void startNavigation() {
-        driver.findElementById("com.example:id/navigationBtn").click();
+        WebElement navBtn = driver.findElement(By.id("net.osmand.plus:id/navigation_button"));
+        navBtn.click();
     }
 }
