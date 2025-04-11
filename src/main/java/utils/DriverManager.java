@@ -2,10 +2,6 @@ package utils;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 
 public class DriverManager {
@@ -25,6 +21,9 @@ public class DriverManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static AndroidDriver getDriver() {
+        return driver;
     }
 
     public static void quitDriver() {

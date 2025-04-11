@@ -1,7 +1,7 @@
 <suite name="mobile-automation">
     <test name="All Tests">
         <classes>
-            <class name="tests.MapTests"/>
+            <class name="tests.MapSearchTests"/>
             <class name="tests.RouteNavigationTests"/>
         </classes>
     </test>
