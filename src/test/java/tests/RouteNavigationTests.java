@@ -7,7 +7,7 @@ import pages.MapPage;
 import pages.NavigationPage;
 import utils.TestUtils;
 
-public class RouteNavigationTest extends BaseTest {
+public class RouteNavigationTests extends BaseTest {
 
     private MapPage mapPage;
   private  NavigationPage navigationPage;
