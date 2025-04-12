@@ -23,7 +23,7 @@ public class MapSearchTests extends BaseTest {
     //@Description("Searching for a location within map mobile app")
     public void searchLocationTest() {
         mapSearchFlows.searchLocation("The Headrow Leeds");
-
+        test.info("Searched for location 'The Headrow Leeds'");
         SearchPage searchPage = new SearchPage(driver);
         boolean resultDisplayed = searchPage.isSearchResultDisplayed("The Headrow");
         Assert.assertTrue(resultDisplayed, "'The Headrow' not found in search results");
@@ -36,6 +36,7 @@ public class MapSearchTests extends BaseTest {
     public void selectSearchResult() {
         mapSearchFlows.searchLocation("The Headrow")
                 .selectSearchResultByText("The Headrow").selectSearchResult();
+        test.info("Searched and selected location 'The Headrow'");
         boolean navigationButtonVisible = mapPage.isNavigationButtonVisible();
         Assert.assertTrue(navigationButtonVisible, "Navigation button is not visible");
         test.pass("The navigation button was visible after selection!");

@@ -28,7 +28,7 @@ public class RouteNavigationTests extends BaseTest {
 
         navigationFlows.startRouteNavigation("The Headrow")
                 .clickStartButton();
-
+        test.info("Route navigation started");
         Assert.assertTrue(mapPage.isNavigationUIVisible(), "Navigation did not start as expected.");
         test.pass("Navigation did start as expected!");
     }
@@ -39,7 +39,7 @@ public class RouteNavigationTests extends BaseTest {
     public void startNavigationWithMultipleStops() {
         navigationFlows.startRoutNavigationWithExactLocation("Leeds Beckett University")
                 .addExtraStop("Castleford");
-
+        test.info("Extra stop added");
         TestUtils.waitUntilAsserted(() -> {
             int count = navigationPage.getRouteSummaryItemCount();
             Assert.assertEquals(count, 5, "Expected 4 route summary values in the top-right panel.");
@@ -56,6 +56,7 @@ public class RouteNavigationTests extends BaseTest {
                 .clickMenuButton()
                 .clickNavigationButton()
                 .clickStopButtonAndConfirm();
+        test.info("Stop button pressed");
         Assert.assertTrue(mapPage.assertReturnToMapPage(), "Expected previous screen element to disappear.");
         test.pass("Successfully stopped and started a journey!");
     }
