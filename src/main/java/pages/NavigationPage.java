@@ -3,7 +3,6 @@ package pages;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.GestureUtils;
 import utils.TestUtils;
 
@@ -11,20 +10,19 @@ import java.util.List;
 
 public class NavigationPage {
 
-AppiumDriver driver;
-
-private static final By START_BUTTON_LOCATOR = By.id("net.osmand.plus:id/start_button_descr");
+    private static final By START_BUTTON_LOCATOR = By.id("net.osmand.plus:id/start_button_descr");
     private static final By ADD_STOP_BUTTON_LOCATOR = By.id("net.osmand.plus:id/to_button_image_view");
     private static final By SEARCH_BUTTON_LOCATOR = By.id("net.osmand.plus:id/first_item");
     private static final By SEARCH_TEXTBOX_LOCATOR = By.id("net.osmand.plus:id/searchEditText");
     private static final By ROUTE_SUMMARY_MENU_LOCATOR = By.id("net.osmand.plus:id/map_right_widgets_panel");
-   private static final By ROUTE_SUMMARY_MENU_ITEMS_LOCATOR = By.xpath(".//android.widget.LinearLayout[@resource-id='net.osmand.plus:id/container']");
-   private static final By MENU_BUTTON_LOCATOR = By.xpath("//android.widget.ImageView[@content-desc=\"Back to menu\"]");
-  private static final By NAVIGATION_BUTTON_LOCATOR = By.xpath("//android.widget.ListView[@resource-id=\"net.osmand.plus:id/menuItems\"]/android.widget.LinearLayout[6]");
-  private static final By STOP_BUTTON = By.id("net.osmand.plus:id/cancel_button_descr");
-  private static final By YES_BUTTON = By.xpath("//android.widget.TextView[@resource-id=\"net.osmand.plus:id/button_text\" and @text=\"Yes\"]");
+    private static final By ROUTE_SUMMARY_MENU_ITEMS_LOCATOR = By.xpath(".//android.widget.LinearLayout[@resource-id='net.osmand.plus:id/container']");
+    private static final By MENU_BUTTON_LOCATOR = By.xpath("//android.widget.ImageView[@content-desc=\"Back to menu\"]");
+    private static final By NAVIGATION_BUTTON_LOCATOR = By.xpath("//android.widget.ListView[@resource-id=\"net.osmand.plus:id/menuItems\"]/android.widget.LinearLayout[6]");
+    private static final By STOP_BUTTON = By.id("net.osmand.plus:id/cancel_button_descr");
+    private static final By YES_BUTTON = By.xpath("//android.widget.TextView[@resource-id=\"net.osmand.plus:id/button_text\" and @text=\"Yes\"]");
+    AppiumDriver driver;
 
-  public NavigationPage(AppiumDriver driver) {
+    public NavigationPage(AppiumDriver driver) {
         this.driver = driver;
     }
 
@@ -33,26 +31,28 @@ private static final By START_BUTTON_LOCATOR = By.id("net.osmand.plus:id/start_b
         startButton.click();
         return this;
     }
+
     public NavigationPage addExtraStop(String secondDestination) {
         WebElement addStopButton = driver.findElement(ADD_STOP_BUTTON_LOCATOR);
-    addStopButton.click();
-        TestUtils.waitForAllElementsToBeVisible(driver,SEARCH_BUTTON_LOCATOR);
-    WebElement searchButton = driver.findElement(SEARCH_BUTTON_LOCATOR);
-    searchButton.click();
-    WebElement searchTextBox = driver.findElement(SEARCH_TEXTBOX_LOCATOR);
-    searchTextBox.click();
-    searchTextBox.sendKeys(secondDestination);
-    SearchPage searchPage = new SearchPage(driver);
-    searchPage.selectSearchResultByText(secondDestination)
-            .selectSearchResult();
+        addStopButton.click();
+        TestUtils.waitForAllElementsToBeVisible(driver, SEARCH_BUTTON_LOCATOR);
+        WebElement searchButton = driver.findElement(SEARCH_BUTTON_LOCATOR);
+        searchButton.click();
+        WebElement searchTextBox = driver.findElement(SEARCH_TEXTBOX_LOCATOR);
+        searchTextBox.click();
+        searchTextBox.sendKeys(secondDestination);
+        SearchPage searchPage = new SearchPage(driver);
+        searchPage.selectSearchResultByText(secondDestination)
+                .selectSearchResult();
         NavigationPage navigationPage = new NavigationPage(driver);
         navigationPage.clickStartButton();
-    return this;
+        return this;
     }
+
     public int getRouteSummaryItemCount() {
         WebElement panel = driver.findElement(ROUTE_SUMMARY_MENU_LOCATOR);
 
-        // Find only containers inside the panel
+        // Will find only the containers within the panel
         List<WebElement> containers = panel.findElements(
                 ROUTE_SUMMARY_MENU_ITEMS_LOCATOR);
 
@@ -70,23 +70,25 @@ private static final By START_BUTTON_LOCATOR = By.id("net.osmand.plus:id/start_b
         GestureUtils gestureUtils = new GestureUtils(driver);
         gestureUtils.tapBottomLeftCornerAndWaitForMenu(MENU_BUTTON_LOCATOR);
         WebElement menuButton = driver.findElement(MENU_BUTTON_LOCATOR);
-    menuButton.click();
-    return this;
+        menuButton.click();
+        return this;
     }
+
     public NavigationPage clickNavigationButton() {
-      TestUtils.waitUntilElementIsVisible(driver,NAVIGATION_BUTTON_LOCATOR);
+        TestUtils.waitUntilElementIsVisible(driver, NAVIGATION_BUTTON_LOCATOR);
         WebElement navigationButton = driver.findElement(NAVIGATION_BUTTON_LOCATOR);
         navigationButton.click();
         return this;
     }
+
     public MapPage clickStopButtonAndConfirm() {
         WebElement stopButton = driver.findElement(STOP_BUTTON);
         stopButton.click();
         WebElement yesButton = TestUtils.waitUntilElementIsVisible(driver,
                 YES_BUTTON);
-    yesButton.click();
-    return new MapPage(driver);
-        }
+        yesButton.click();
+        return new MapPage(driver);
+    }
 
 
 }

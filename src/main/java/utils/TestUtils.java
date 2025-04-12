@@ -1,6 +1,7 @@
- package utils;
+package utils;
 
 import io.appium.java_client.AppiumDriver;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
@@ -9,13 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 
 public class TestUtils {
 
-    public static void captureScreenshot(String testName, AppiumDriver driver) {
+    public static String captureScreenshot(String testName, AppiumDriver driver) {
+        String filePath = null;
         try {
             File screenshotDir = new File("screenshots");
             if (!screenshotDir.exists()) {
@@ -23,13 +22,15 @@ public class TestUtils {
             }
 
             File srcFile = driver.getScreenshotAs(OutputType.FILE);
-            String fileName = "screenshots/" + testName + "_" + System.currentTimeMillis() + ".png";
-            FileUtils.copyFile(srcFile, new File(fileName));
-            System.out.println("Screenshot saved to: " + fileName);
+            filePath = "screenshots/" + testName + "_" + System.currentTimeMillis() + ".png";
+            FileUtils.copyFile(srcFile, new File(filePath));
+            System.out.println("Screenshot saved to: " + filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return filePath;
     }
+
     public static boolean waitUntilElementIsGone(AppiumDriver driver, By locator) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
@@ -43,6 +44,7 @@ public class TestUtils {
     public static void waitForAllElementsToBeVisible(AppiumDriver driver, By locator) {
         waitForAllElementsToBeVisible(driver, locator, Duration.ofSeconds(10));
     }
+
     public static WebElement waitToBeClickable(AppiumDriver driver, WebElement element) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(element));
@@ -57,30 +59,32 @@ public class TestUtils {
             return false;
         }
     }
+
     public static WebElement waitUntilElementIsVisible(AppiumDriver driver, By locator) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
+
     public static void waitUntilAsserted(Runnable assertion, int timeoutInSeconds, int pollIntervalMillis) {
-        long endTime = System.currentTimeMillis() + (timeoutInSeconds * 1000);
+        long endTime = System.currentTimeMillis() + (timeoutInSeconds * 1000L);
         AssertionError lastError = null;
 
         while (System.currentTimeMillis() < endTime) {
             try {
                 assertion.run();
-                return; // success, assertion passed
+                return;
             } catch (AssertionError e) {
                 lastError = e;
                 try {
                     Thread.sleep(pollIntervalMillis);
                 } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt(); // restore interrupted status
+                    Thread.currentThread().interrupt();
                     throw new RuntimeException("Thread was interrupted while waiting for assertion", ie);
                 }
             }
         }
 
-        // If we get here, all retries failed
+        // retries have all failed at this point
         if (lastError != null) {
             throw lastError;
         } else {

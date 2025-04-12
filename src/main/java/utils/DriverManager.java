@@ -2,6 +2,7 @@ package utils;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
+
 import java.net.URL;
 
 public class DriverManager {
@@ -22,6 +23,7 @@ public class DriverManager {
             e.printStackTrace();
         }
     }
+
     public static AndroidDriver getDriver() {
         return driver;
     }

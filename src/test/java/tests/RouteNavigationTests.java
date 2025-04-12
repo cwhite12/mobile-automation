@@ -2,7 +2,8 @@ package tests;
 
 import flows.NavigationFlows;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import pages.MapPage;
 import pages.NavigationPage;
 import utils.TestUtils;
@@ -10,7 +11,7 @@ import utils.TestUtils;
 public class RouteNavigationTests extends BaseTest {
 
     private MapPage mapPage;
-  private  NavigationPage navigationPage;
+    private NavigationPage navigationPage;
     private NavigationFlows navigationFlows;
 
     @BeforeMethod
@@ -19,15 +20,7 @@ public class RouteNavigationTests extends BaseTest {
         navigationPage = new NavigationPage(driver);
         navigationFlows = new NavigationFlows(driver);
     }
-//    public NavigationPage startRouteNavigation(String destination) {
-//        mapPage.openSearch()
-//        .enterSearchQuery(destination)
-//                .selectSearchResultByText(destination)
-//                .selectSearchResult()
-//                .startNavigation();
-//
-//        return new NavigationPage(driver);
-//    }
+
     @Test
     //@TestCase(key = "QA-T3")
     //@Description("Starting navigation and verifying that navigation has begun)
@@ -37,7 +30,9 @@ public class RouteNavigationTests extends BaseTest {
                 .clickStartButton();
 
         Assert.assertTrue(mapPage.isNavigationUIVisible(), "Navigation did not start as expected.");
+        test.pass("Navigation did start as expected!");
     }
+
     @Test
     //@TestCase(key = "QA-T4")
     //@Description("Starting a journey with multiple stops")
@@ -49,10 +44,11 @@ public class RouteNavigationTests extends BaseTest {
             int count = navigationPage.getRouteSummaryItemCount();
             Assert.assertEquals(count, 5, "Expected 4 route summary values in the top-right panel.");
         }, 25, 500);
-
+        test.pass("All elements on navigation page are visible!");
     }
+
     @Test
-    //@TestCase(key = "QA-T4")
+    //@TestCase(key = "QA-T5")
     //@Description("Stopping and starting a journey")
     public void startAndStopNavigationTest() {
         navigationFlows.startRouteNavigation("The Headrow")
@@ -61,5 +57,6 @@ public class RouteNavigationTests extends BaseTest {
                 .clickNavigationButton()
                 .clickStopButtonAndConfirm();
         Assert.assertTrue(mapPage.assertReturnToMapPage(), "Expected previous screen element to disappear.");
+        test.pass("Successfully stopped and started a journey!");
     }
 }

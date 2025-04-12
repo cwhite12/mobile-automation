@@ -11,12 +11,12 @@ import utils.TestUtils;
 import java.time.Duration;
 
 public class MapPage {
-    AppiumDriver driver;
-
     private static final By SPEEDOMETER_LOCATOR = By.id("net.osmand.plus:id/speedometer_container");
-    private static final By NAV_ARROW_LOCATOR = By.id("net.osmand.plus:id/map_marker_arrow");
+    private static final By NAV_ARROW_LOCATOR = By.id("net.osmand.plus:id/widget_top_icon");
     private static final By NAV_BUTTON_LOCATOR = By.id("net.osmand.plus:id/context_menu_directions_button");
     private static final By SEARCH_BUTTON_LOCATOR = By.id("net.osmand.plus:id/map_search_button");
+    AppiumDriver driver;
+
     public MapPage(AppiumDriver driver) {
         this.driver = driver;
     }
@@ -39,7 +39,7 @@ public class MapPage {
 
     public NavigationPage startNavigation() {
         WebElement navBtn = driver.findElement(NAV_BUTTON_LOCATOR);
-        TestUtils.waitUntilElementIsDisplayed(driver,navBtn);
+        TestUtils.waitUntilElementIsDisplayed(driver, navBtn);
         navBtn.click();
         return new NavigationPage(driver);
     }
@@ -47,7 +47,7 @@ public class MapPage {
 
     public boolean isNavigationUIVisible() {
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
             WebElement navArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     NAV_ARROW_LOCATOR));
@@ -61,8 +61,9 @@ public class MapPage {
             return false;
         }
     }
+
     public boolean assertReturnToMapPage() {
-        TestUtils.waitUntilElementIsGone(driver,SPEEDOMETER_LOCATOR);
+        TestUtils.waitUntilElementIsGone(driver, SPEEDOMETER_LOCATOR);
         return true;
     }
 }

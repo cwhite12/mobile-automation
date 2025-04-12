@@ -12,21 +12,21 @@ import java.time.Duration;
 import java.util.List;
 
 public class SearchPage {
-    private AppiumDriver driver;
-
     private static final By SEARCH_FIELD_LOCATOR = By.xpath("//android.widget.EditText[@resource-id=\"net.osmand.plus:id/searchEditText\"]");
     private static final By RESULTS_LOCATOR = By.id("net.osmand.plus:id/buttonToolbarTitle");
     private static final By LIST_ITEM_LOCATOR = By.id("net.osmand.plus:id/searchListItemLayout");
+    private final AppiumDriver driver;
+
     public SearchPage(AppiumDriver driver) {
         this.driver = driver;
     }
+
     public SearchPage enterSearchQuery(String query) {
         WebElement searchField = new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD_LOCATOR));
-//        WebElement searchField = driver.findElement(SEARCH_FIELD_LOCATOR);
         searchField.sendKeys(query);
         TestUtils.waitForAllElementsToBeVisible(driver, SEARCH_FIELD_LOCATOR);
-    return this;
+        return this;
     }
 
     public boolean isSearchResultDisplayed(String resultText) {
@@ -38,6 +38,7 @@ public class SearchPage {
             return false;
         }
     }
+
     public SearchPage selectSearchResultByText(String visibleText) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfAllElementsLocatedBy(LIST_ITEM_LOCATOR));
@@ -58,6 +59,7 @@ public class SearchPage {
 
         throw new NoSuchElementException("No result with text: " + visibleText);
     }
+
     public MapPage selectSearchResult() {
         WebElement result = driver.findElement(RESULTS_LOCATOR);
         result.click();

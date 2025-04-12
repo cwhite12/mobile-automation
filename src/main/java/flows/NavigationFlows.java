@@ -5,13 +5,14 @@ import pages.MapPage;
 import pages.NavigationPage;
 
 public class NavigationFlows {
-    private AppiumDriver driver;
-    private MapPage mapPage;
+    private final AppiumDriver driver;
+    private final MapPage mapPage;
 
     public NavigationFlows(AppiumDriver driver) {
         this.driver = driver;
         this.mapPage = new MapPage(driver);
     }
+
     public NavigationPage startRouteNavigation(String destination) {
         mapPage.openSearch()
                 .enterSearchQuery(destination)
@@ -21,6 +22,7 @@ public class NavigationFlows {
 
         return new NavigationPage(driver);
     }
+
     public NavigationPage startRoutNavigationWithExactLocation(String destination) {
         mapPage.openSearch()
                 .enterSearchQuery(destination)
