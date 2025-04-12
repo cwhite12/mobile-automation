@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import utils.DriverManager;
 import utils.ExtentManager;
+import utils.TestCleanup;
 import utils.TestUtils;
 
 import java.lang.reflect.Method;
@@ -32,6 +33,8 @@ public class BaseTest {
 
     @AfterMethod
     public void handleTestFailure(ITestResult result) {
+        TestCleanup cleanup = new TestCleanup(driver);
+        cleanup.returnToMapPage();
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = TestUtils.captureScreenshot(result.getName(), driver);
             if (test != null) {
