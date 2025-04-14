@@ -1,6 +1,8 @@
 package utils;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.Location;
+import io.appium.java_client.android.AndroidDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -89,6 +91,14 @@ public class TestUtils {
             throw lastError;
         } else {
             throw new AssertionError("Assertion failed and no AssertionError was captured.");
+        }
+    }
+    public static void setMockLocation(AppiumDriver driver, double lat, double lon) {
+        try {
+            ((AndroidDriver) driver).setLocation(new Location(lat, lon));
+            System.out.println("Mock location set to: " + lat + ", " + lon);
+        } catch (Exception e) {
+            System.out.println("Failed to set mock location: " + e.getMessage());
         }
     }
 }

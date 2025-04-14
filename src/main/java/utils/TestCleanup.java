@@ -1,12 +1,19 @@
 package utils;
 
+import flows.NavigationFlows;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class TestCleanup {
 
     private AppiumDriver driver;
+    private static final By SPEEDOMETER_LOCATOR = By.id("net.osmand.plus:id/speedometer_container");
+    private static final By SEARCH_BUTTON_LOCATOR = By.id("net.osmand.plus:id/map_search_button");
 
     public TestCleanup(AppiumDriver driver) {
         this.driver = driver;
@@ -19,27 +26,36 @@ public class TestCleanup {
      */
 
 
-    public void returnToMapPage() {
+    public static void cleanupToMap(AppiumDriver driver) {
         try {
-            int maxBackTaps = 6;
-            for (int i = 0; i < maxBackTaps; i++) {
-                if (isMapPageVisible()) {
-                    System.out.println("Returned to map page.");
-                    return;
-                }
+
+            int maxAttempts = 5;
+            while (!isElementVisible(driver, SEARCH_BUTTON_LOCATOR) && maxAttempts-- > 0) {
                 driver.navigate().back();
-                Thread.sleep(500); // small delay to let transitions finish
+                Thread.sleep(500);
             }
-            System.out.println(" Failed to return to map page in " + maxBackTaps + " attempts.");
+
+            if (isElementVisible(driver, SEARCH_BUTTON_LOCATOR)) {
+                System.out.println("Returned to map page.");
+            } else {
+                System.out.println("Warning: search button not visible. Map page not confirmed.");
+            }
+
+            if (isElementVisible(driver, SPEEDOMETER_LOCATOR)) {
+                System.out.println("Speedometer is still visible – attempting to stop navigation.");
+                NavigationFlows navigationFlows = new NavigationFlows(driver);
+                navigationFlows.stopNavigation();
+            }
+
         } catch (Exception e) {
-            System.out.println("Error in cleanup: " + e.getMessage());
+            System.out.println("Cleanup failed: " + e.getMessage());
         }
     }
 
-    private boolean isMapPageVisible() {
+    private static boolean isElementVisible(AppiumDriver driver, By locator) {
         try {
-            return driver.findElement(By.id("net.osmand.plus:id/map_search_button")).isDisplayed();
-        } catch (NoSuchElementException e) {
+            return driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }

@@ -3,6 +3,7 @@
         <classes>
             <class name="tests.MapSearchTests"/>
             <class name="tests.RouteNavigationTests"/>
+            <class name="tests.LocationTests"/>
         </classes>
     </test>
 </suite>

@@ -32,9 +32,10 @@ public class BaseTest {
     }
 
     @AfterMethod
-    public void handleTestFailure(ITestResult result) {
-        TestCleanup cleanup = new TestCleanup(driver);
-        cleanup.returnToMapPage();
+    public void cleanUpAndReportIfFailed(ITestResult result) {
+
+        TestCleanup.cleanupToMap(driver);
+        TestUtils.setMockLocation(driver,53.6411,-1.5212);//resets location back to Wakefield
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = TestUtils.captureScreenshot(result.getName(), driver);
             if (test != null) {

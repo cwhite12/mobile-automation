@@ -2,10 +2,15 @@ package pages;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.GestureUtils;
 import utils.TestUtils;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NavigationPage {
@@ -20,6 +25,8 @@ public class NavigationPage {
     private static final By NAVIGATION_BUTTON_LOCATOR = By.xpath("//android.widget.ListView[@resource-id=\"net.osmand.plus:id/menuItems\"]/android.widget.LinearLayout[6]");
     private static final By STOP_BUTTON = By.id("net.osmand.plus:id/cancel_button_descr");
     private static final By YES_BUTTON = By.xpath("//android.widget.TextView[@resource-id=\"net.osmand.plus:id/button_text\" and @text=\"Yes\"]");
+    private static final By SPEEDOMETER_LOCATOR = By.id("net.osmand.plus:id/speedometer_container");
+
     AppiumDriver driver;
 
     public NavigationPage(AppiumDriver driver) {
@@ -48,6 +55,17 @@ public class NavigationPage {
         navigationPage.clickStartButton();
         return this;
     }
+    public boolean isNavigationStarted() {
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            boolean isRouteSummaryVisible = wait.until(ExpectedConditions.visibilityOfElementLocated(ROUTE_SUMMARY_MENU_LOCATOR))
+                    .isDisplayed();
+            List<WebElement> startButtons = driver.findElements(START_BUTTON_LOCATOR);
+            boolean isStartButtonVisible = !startButtons.isEmpty() && startButtons.get(0).isDisplayed();
+
+            return isRouteSummaryVisible && !isStartButtonVisible;
+
+    }
 
     public int getRouteSummaryItemCount() {
         WebElement panel = driver.findElement(ROUTE_SUMMARY_MENU_LOCATOR);
@@ -64,6 +82,20 @@ public class NavigationPage {
         }
 
         return visibleCount;
+    }
+    public List<String> getRouteSummaryTexts() {
+        WebElement panel = driver.findElement(By.id("net.osmand.plus:id/map_right_widgets_panel"));
+
+        // Find all descendant TextViews, not just direct children
+        List<WebElement> textViews = panel.findElements(By.xpath(".//android.widget.TextView"));
+
+        List<String> values = new ArrayList<>();
+        for (WebElement textView : textViews) {
+            if (textView.isDisplayed()) {
+                values.add(textView.getText().trim());
+            }
+        }
+        return values;
     }
 
     public NavigationPage clickMenuButton() {
